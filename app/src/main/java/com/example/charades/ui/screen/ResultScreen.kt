@@ -27,7 +27,8 @@ fun ResultScreen(
     wordHeader: String,
     timeHeader: String,
     statusHeader: String,
-    gradientBrush: Brush
+    gradientBrush: Brush,
+    buttonColor: Color // Added buttonColor parameter
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -88,7 +89,7 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onRestart,
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                colors = ButtonDefaults.buttonColors(containerColor = buttonColor) // Use passed buttonColor
             ) {
                 Text(text = btnRestart, color = Color.White)
             }

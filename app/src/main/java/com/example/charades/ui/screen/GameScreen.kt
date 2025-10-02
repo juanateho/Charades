@@ -28,6 +28,9 @@ fun GameScreen(
     btnPass: String,
     gradientBrush: Brush
 ) {
+    val transparentPassRed = Color(0xFFD50000).copy(alpha = 0.3f) // More vibrant, more transparent red
+    val transparentCorrectGreen = Color(0xFF00C853).copy(alpha = 0.3f) // More vibrant, more transparent green
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -42,7 +45,7 @@ fun GameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Red, contentColor = Color.White),
+                colors = ButtonDefaults.buttonColors(containerColor = transparentPassRed, contentColor = Color.White),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
                 Text(text = btnPass, fontSize = 24.sp)
@@ -80,7 +83,7 @@ fun GameScreen(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxHeight(),
-                colors = ButtonDefaults.buttonColors(containerColor = Color.Green, contentColor = Color.White),
+                colors = ButtonDefaults.buttonColors(containerColor = transparentCorrectGreen, contentColor = Color.White),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
                 Text(text = btnCorrect, fontSize = 24.sp)

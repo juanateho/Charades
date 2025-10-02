@@ -15,6 +15,7 @@ import com.example.charades.R
 
 @Composable
 fun CategoryMenuScreen(
+    buttonColor: Color, // Added buttonColor parameter
     onCategorySelected: (String) -> Unit
 ) {
     val categories = listOf(
@@ -44,7 +45,7 @@ fun CategoryMenuScreen(
                 Button(
                     onClick = { onCategorySelected(category) },
                     modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+                    colors = ButtonDefaults.buttonColors(containerColor = buttonColor) // Use passed buttonColor
                 ) {
                     Text(text = category, color = Color.White, fontSize = 20.sp)
                 }

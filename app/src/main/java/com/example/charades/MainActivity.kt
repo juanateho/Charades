@@ -1,4 +1,3 @@
-
 package com.example.charades
 
 import android.content.res.Configuration
@@ -12,8 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.example.charades.ui.screen.CategoryMenuScreen
@@ -60,9 +59,8 @@ fun MainScreen() {
     val localizedContext = context.createConfigurationContext(configuration)
 
     CompositionLocalProvider(LocalContext provides localizedContext) {
-        val darkGradientBrush = Brush.verticalGradient(
-            colors = listOf(Color(0xFF0D47A1), Color(0xFF4A148C))
-        )
+        val newBackgroundBrush = SolidColor(Color(0xFF0E0929))
+        val transparentButtonColor = Color(0xFF7F52FF).copy(alpha = 0.6f)
 
         // Timer effect
         LaunchedEffect(timerRunning, timeLeft, screen) {
@@ -79,46 +77,55 @@ fun MainScreen() {
             "main" -> {
                 val title = if (language == "en") "CHARADES" else "CHARADAS"
                 val btnStart = stringResource(R.string.btn_start)
-                val btnLanguage = if (language == "en") "Language: English" else "Idioma: Español"
-                val btnToggleLanguage = if (language == "en") "Cambiar a Español" else "Switch to English"
+
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                 ) {
-                    Column(
+                    Box(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(darkGradientBrush) // Using dark gradient
-                            .padding(32.dp),
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
+                            .background(newBackgroundBrush)
                     ) {
-                        Text(
-                            text = title,
-                            fontSize = 40.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = Color.White // White for dark theme
-                        )
-                        Spacer(modifier = Modifier.height(32.dp))
-                        Text(text = btnLanguage, fontSize = 18.sp, color = Color.White) // White for dark theme
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Column(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .padding(horizontal = 32.dp),
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = title,
+                                fontSize = 40.sp,
+                                fontWeight = FontWeight.Bold,
+                                color = Color.White
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+                            Button(
+                                onClick = {
+                                    screen = "category"
+                                },
+                                modifier = Modifier.fillMaxWidth().height(56.dp),
+                                colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor)
+                            ) {
+                                Text(text = btnStart, color = Color.White, fontSize = 18.sp)
+                            }
+                        }
+
                         Button(
                             onClick = {
                                 language = if (language == "en") "es" else "en"
                             },
-                            modifier = Modifier.fillMaxWidth().height(56.dp), // Increased size
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .padding(16.dp), // Padding for the Button itself
+                            colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor), // Use standard button color
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp) // Adjusted padding
                         ) {
-                            Text(text = btnToggleLanguage, color = Color.White, fontSize = 18.sp)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Button(
-                            onClick = {
-                                screen = "category"
-                            },
-                            modifier = Modifier.fillMaxWidth().height(56.dp), // Increased size
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
-                        ) {
-                            Text(text = btnStart, color = Color.White, fontSize = 18.sp)
+                            Text(
+                                text = "EN/ES",
+                                color = Color.White,
+                                fontSize = 16.sp
+                            )
                         }
                     }
                 }
@@ -128,7 +135,7 @@ fun MainScreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(darkGradientBrush) // Using dark gradient
+                        .background(newBackgroundBrush) // Using new background
                         .padding(32.dp),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -139,42 +146,45 @@ fun MainScreen() {
                     ) {
                         Button(
                             onClick = { screen = "main" },
-                            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+                            colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor)
                         ) {
                             Text(text = btnBack, color = Color.White)
                         }
                     }
                     Spacer(modifier = Modifier.height(16.dp))
-                    CategoryMenuScreen { category ->
-                        selectedCategory = category
-                        val key = when (category.lowercase()) {
-                            "animales", "animals" -> "animals"
-                            "películas", "movies" -> "movies"
-                            "profesiones", "professions" -> "professions"
-                            else -> ""
+                    CategoryMenuScreen(
+                        buttonColor = transparentButtonColor, // Pass the color
+                        onCategorySelected = { category ->
+                            selectedCategory = category
+                            val key = when (category.lowercase()) {
+                                "animales", "animals" -> "animals"
+                                "películas", "movies" -> "movies"
+                                "profesiones", "professions" -> "professions"
+                                else -> ""
+                            }
+                            wordList = when (key) {
+                                "animals" -> Words.animals[language] ?: listOf()
+                                "movies" -> Words.movies[language] ?: listOf()
+                                "professions" -> Words.professions[language] ?: listOf()
+                                else -> listOf()
+                            }.shuffled()
+                            round = 0
+                            score = 0
+                            timeLeft = 60
+                            currentWord = if (wordList.isNotEmpty()) wordList[0] else ""
+                            guessedWords = listOf()
+                            lastTimeLeft = 60
+                            timerRunning = true
+                            screen = "game"
                         }
-                        wordList = when (key) {
-                            "animals" -> Words.animals[language] ?: listOf()
-                            "movies" -> Words.movies[language] ?: listOf()
-                            "professions" -> Words.professions[language] ?: listOf()
-                            else -> listOf()
-                        }.shuffled()
-                        round = 0
-                        score = 0
-                        timeLeft = 60
-                        currentWord = if (wordList.isNotEmpty()) wordList[0] else ""
-                        guessedWords = listOf()
-                        lastTimeLeft = 60
-                        timerRunning = true
-                        screen = "game"
-                    }
+                    )
                 }
             }
             "game" -> {
                 val timerText = stringResource(R.string.timer)
                 val scoreText = stringResource(R.string.score)
                 val btnCorrect = stringResource(R.string.btn_correct)
-                val btnPass = if (language == "en") "Pass" else "Pasar" // New button text
+                val btnPass = if (language == "en") "Pass" else "Pasar"
 
                 GameScreen(
                     category = selectedCategory,
@@ -191,7 +201,7 @@ fun MainScreen() {
                             screen = "result"
                         }
                     },
-                    onPass = { // New onPass lambda
+                    onPass = {
                         guessedWords = guessedWords + Triple(currentWord, (lastTimeLeft - timeLeft), "passed")
                         round += 1
                         lastTimeLeft = timeLeft
@@ -212,8 +222,8 @@ fun MainScreen() {
                     timerText = timerText,
                     scoreText = scoreText,
                     btnCorrect = btnCorrect,
-                    btnPass = btnPass, // Pass the new button text
-                    gradientBrush = darkGradientBrush // Pass the gradient
+                    btnPass = btnPass,
+                    gradientBrush = newBackgroundBrush
                 )
             }
             "result" -> {
@@ -222,7 +232,7 @@ fun MainScreen() {
                 val btnRestart = stringResource(R.string.btn_restart)
                 val wordHeader = if (language == "en") "Word" else "Palabra"
                 val timeHeader = if (language == "en") "Time (s)" else "Tiempo (s)"
-                val statusHeader = if (language == "en") "Status" else "Estado" // For result table
+                val statusHeader = if (language == "en") "Status" else "Estado"
 
                 ResultScreen(
                     score = score,
@@ -241,11 +251,12 @@ fun MainScreen() {
                     resultTitle = resultTitle,
                     finalScore = finalScore,
                     btnRestart = btnRestart,
-                    guessedWords = guessedWords, // This is now List<Triple<String, Int, String>>
+                    guessedWords = guessedWords,
                     wordHeader = wordHeader,
                     timeHeader = timeHeader,
                     statusHeader = statusHeader,
-                    gradientBrush = darkGradientBrush
+                    gradientBrush = newBackgroundBrush,
+                    buttonColor = transparentButtonColor
                 )
             }
         }
