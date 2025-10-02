@@ -13,4 +13,6 @@
     <string name="category_animals">Animals</string>
     <string name="category_movies">Movies</string>
     <string name="category_professions">Professions</string>
+    <string name="status_guessed">Guessed</string>
+    <string name="status_passed">Passed</string>
 </resources>
