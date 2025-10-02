@@ -6,8 +6,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,8 +31,8 @@ fun GameScreen(
     btnPass: String,
     gradientBrush: Brush
 ) {
-    val transparentPassRed = Color(0xFFD50000).copy(alpha = 0.3f) // More vibrant, more transparent red
-    val transparentCorrectGreen = Color(0xFF00C853).copy(alpha = 0.3f) // More vibrant, more transparent green
+    val passTextColor = Color(0xFFD50000) // Vibrant Red for Pass text
+    val correctTextColor = Color(0xFF00C853) // Vibrant Green for Correct text
 
     Box(
         modifier = Modifier
@@ -44,8 +47,21 @@ fun GameScreen(
                 onClick = onPass,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
-                colors = ButtonDefaults.buttonColors(containerColor = transparentPassRed, contentColor = Color.White),
+                    .fillMaxHeight()
+                    .drawBehind {
+                        val strokeWidth = 1.dp.toPx()
+                        drawLine(
+                            color = passTextColor,
+                            start = Offset(size.width - strokeWidth / 2, 0f),
+                            end = Offset(size.width - strokeWidth / 2, size.height),
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Square
+                        )
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent, // Fully transparent background
+                    contentColor = passTextColor // Text color provides the shine
+                ),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
                 Text(text = btnPass, fontSize = 24.sp)
@@ -82,8 +98,21 @@ fun GameScreen(
                 onClick = onCorrect,
                 modifier = Modifier
                     .weight(1f)
-                    .fillMaxHeight(),
-                colors = ButtonDefaults.buttonColors(containerColor = transparentCorrectGreen, contentColor = Color.White),
+                    .fillMaxHeight()
+                    .drawBehind {
+                        val strokeWidth = 1.dp.toPx()
+                        drawLine(
+                            color = correctTextColor,
+                            start = Offset(strokeWidth / 2, 0f),
+                            end = Offset(strokeWidth / 2, size.height),
+                            strokeWidth = strokeWidth,
+                            cap = StrokeCap.Square
+                        )
+                    },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent, // Fully transparent background
+                    contentColor = correctTextColor // Text color provides the shine
+                ),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
                 Text(text = btnCorrect, fontSize = 24.sp)
