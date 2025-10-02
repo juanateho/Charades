@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Charadas</string>
+    <string name="title_main">CHARADAS</string>
+    <string name="btn_language">Cambiar idioma</string>
+    <string name="btn_start">Iniciar juego</string>
+    <string name="select_category">Selecciona una categoría</string>
+    <string name="score">Puntaje</string>
+    <string name="timer">Tiempo restante</string>
+    <string name="btn_correct">¡Acierto!</string>
+    <string name="btn_restart">Reiniciar juego</string>
+    <string name="result_title">Resultados</string>
+    <string name="final_score">Puntaje final</string>
+    <string name="category_animals">Animales</string>
+    <string name="category_movies">Películas</string>
+    <string name="category_professions">Profesiones</string>
+</resources>
