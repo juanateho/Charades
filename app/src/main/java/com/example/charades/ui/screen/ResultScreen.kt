@@ -8,6 +8,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -28,7 +30,8 @@ fun ResultScreen(
     timeHeader: String,
     statusHeader: String,
     gradientBrush: Brush,
-    buttonColor: Color // Added buttonColor parameter
+    buttonColor: Color,
+    geometricPatternColor: Color // Added parameter
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -37,6 +40,25 @@ fun ResultScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(gradientBrush)
+                .drawBehind { // Added geometric pattern
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
+                    drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.6f,
+                        center = Offset(x = canvasWidth * 0.2f, y = canvasHeight * 0.3f)
+                    )
+                    drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.5f,
+                        center = Offset(x = canvasWidth * 0.85f, y = canvasHeight * 0.7f)
+                    )
+                    drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.4f,
+                        center = Offset(x = canvasWidth * 0.5f, y = canvasHeight * 0.9f)
+                    )
+                }
                 .padding(32.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
@@ -89,7 +111,7 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onRestart,
-                colors = ButtonDefaults.buttonColors(containerColor = buttonColor) // Use passed buttonColor
+                colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
             ) {
                 Text(text = btnRestart, color = Color.White)
             }

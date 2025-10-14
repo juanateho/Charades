@@ -11,6 +11,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
@@ -49,7 +51,7 @@ fun MainScreen() {
     var currentWord by remember { mutableStateOf("") }
     var timeLeft by remember { mutableStateOf(60) }
     var timerRunning by remember { mutableStateOf(false) }
-    var guessedWords by remember { mutableStateOf(listOf<Triple<String, Int, String>>()) } // Word, Time, Status("guessed" or "passed")
+    var guessedWords by remember { mutableStateOf(listOf<Triple<String, Int, String>>()) }
     var lastTimeLeft by remember { mutableStateOf(60) }
 
     val locale = Locale(language)
@@ -61,8 +63,32 @@ fun MainScreen() {
     CompositionLocalProvider(LocalContext provides localizedContext) {
         val newBackgroundBrush = SolidColor(Color(0xFF0E0929))
         val transparentButtonColor = Color(0xFF7F52FF).copy(alpha = 0.6f)
+        val geometricPatternColor = Color(0xFF4A2A7E).copy(alpha = 0.15f)
 
-        // Timer effect
+        val drawGeometricPattern: Modifier.(Boolean) -> Modifier = { apply ->
+            if (apply) {
+                this.drawBehind { // 'this' refers to DrawScope
+                    val canvasWidth = size.width
+                    val canvasHeight = size.height
+                    drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.6f,
+                        center = Offset(x = canvasWidth * 0.2f, y = canvasHeight * 0.3f)
+                    )
+                    drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.5f,
+                        center = Offset(x = canvasWidth * 0.85f, y = canvasHeight * 0.7f)
+                    )
+                     drawCircle(
+                        color = geometricPatternColor,
+                        radius = canvasWidth * 0.4f,
+                        center = Offset(x = canvasWidth * 0.5f, y = canvasHeight * 0.9f)
+                    )
+                }
+            } else this
+        }
+
         LaunchedEffect(timerRunning, timeLeft, screen) {
             if (timerRunning && timeLeft > 0 && screen == "game") {
                 kotlinx.coroutines.delay(1000)
@@ -85,6 +111,7 @@ fun MainScreen() {
                         modifier = Modifier
                             .fillMaxSize()
                             .background(newBackgroundBrush)
+                            .drawGeometricPattern(true)
                     ) {
                         Column(
                             modifier = Modifier
@@ -101,31 +128,22 @@ fun MainScreen() {
                             )
                             Spacer(modifier = Modifier.height(32.dp))
                             Button(
-                                onClick = {
-                                    screen = "category"
-                                },
+                                onClick = { screen = "category" },
                                 modifier = Modifier.fillMaxWidth().height(56.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor)
                             ) {
                                 Text(text = btnStart, color = Color.White, fontSize = 18.sp)
                             }
                         }
-
                         Button(
-                            onClick = {
-                                language = if (language == "en") "es" else "en"
-                            },
+                            onClick = { language = if (language == "en") "es" else "en" },
                             modifier = Modifier
                                 .align(Alignment.BottomEnd)
-                                .padding(16.dp), // Padding for the Button itself
-                            colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor), // Use standard button color
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp) // Adjusted padding
+                                .padding(16.dp),
+                            colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor),
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
                         ) {
-                            Text(
-                                text = "EN/ES",
-                                color = Color.White,
-                                fontSize = 16.sp
-                            )
+                            Text(text = "EN/ES", color = Color.White, fontSize = 16.sp)
                         }
                     }
                 }
@@ -135,7 +153,8 @@ fun MainScreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .background(newBackgroundBrush) // Using new background
+                        .background(newBackgroundBrush)
+                        .drawGeometricPattern(true)
                         .padding(32.dp),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
@@ -153,7 +172,7 @@ fun MainScreen() {
                     }
                     Spacer(modifier = Modifier.height(16.dp))
                     CategoryMenuScreen(
-                        buttonColor = transparentButtonColor, // Pass the color
+                        buttonColor = transparentButtonColor,
                         onCategorySelected = { category ->
                             selectedCategory = category
                             val key = when (category.lowercase()) {
@@ -223,7 +242,8 @@ fun MainScreen() {
                     scoreText = scoreText,
                     btnCorrect = btnCorrect,
                     btnPass = btnPass,
-                    gradientBrush = newBackgroundBrush
+                    gradientBrush = newBackgroundBrush,
+                    geometricPatternColor = geometricPatternColor
                 )
             }
             "result" -> {
@@ -256,7 +276,8 @@ fun MainScreen() {
                     timeHeader = timeHeader,
                     statusHeader = statusHeader,
                     gradientBrush = newBackgroundBrush,
-                    buttonColor = transparentButtonColor
+                    buttonColor = transparentButtonColor,
+                    geometricPatternColor = geometricPatternColor
                 )
             }
         }

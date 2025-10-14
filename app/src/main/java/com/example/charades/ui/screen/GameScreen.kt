@@ -29,7 +29,8 @@ fun GameScreen(
     scoreText: String,
     btnCorrect: String,
     btnPass: String,
-    gradientBrush: Brush
+    gradientBrush: Brush,
+    geometricPatternColor: Color // Added parameter
 ) {
     val passTextColor = Color(0xFFD50000) // Vibrant Red for Pass text
     val correctTextColor = Color(0xFF00C853) // Vibrant Green for Correct text
@@ -38,6 +39,25 @@ fun GameScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(gradientBrush)
+            .drawBehind { // Added geometric pattern
+                val canvasWidth = size.width
+                val canvasHeight = size.height
+                drawCircle(
+                    color = geometricPatternColor,
+                    radius = canvasWidth * 0.6f,
+                    center = Offset(x = canvasWidth * 0.2f, y = canvasHeight * 0.3f)
+                )
+                drawCircle(
+                    color = geometricPatternColor,
+                    radius = canvasWidth * 0.5f,
+                    center = Offset(x = canvasWidth * 0.85f, y = canvasHeight * 0.7f)
+                )
+                drawCircle(
+                    color = geometricPatternColor,
+                    radius = canvasWidth * 0.4f,
+                    center = Offset(x = canvasWidth * 0.5f, y = canvasHeight * 0.9f)
+                )
+            }
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -59,8 +79,8 @@ fun GameScreen(
                         )
                     },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent, // Fully transparent background
-                    contentColor = passTextColor // Text color provides the shine
+                    containerColor = Color.Transparent,
+                    contentColor = passTextColor
                 ),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
@@ -110,8 +130,8 @@ fun GameScreen(
                         )
                     },
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent, // Fully transparent background
-                    contentColor = correctTextColor // Text color provides the shine
+                    containerColor = Color.Transparent,
+                    contentColor = correctTextColor
                 ),
                 shape = MaterialTheme.shapes.extraSmall
             ) {
