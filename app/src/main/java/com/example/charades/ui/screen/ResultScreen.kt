@@ -91,17 +91,22 @@ fun ResultScreen(
 
                     // Data columns
                     guessedWords.forEach { (word, time, status) ->
-                        val statusText = if (status == "guessed") {
-                            stringResource(R.string.status_guessed)
-                        } else {
-                            stringResource(R.string.status_passed)
+                        val statusText = when (status) {
+                            "guessed" -> stringResource(R.string.status_guessed)
+                            "passed" -> stringResource(R.string.status_passed)
+                            else -> stringResource(R.string.status_not_guessed)
+                        }
+                        val statusColor = when (status) {
+                            "guessed" -> Color.Green
+                            "passed" -> Color.Red
+                            else -> Color.Yellow
                         }
                         Column {
                             Text(word, color = Color.White)
                             Text(time.toString(), color = Color.White)
                             Text(
                                 text = statusText,
-                                color = if (status == "guessed") Color.Green else Color.Red
+                                color = statusColor
                             )
                         }
                     }

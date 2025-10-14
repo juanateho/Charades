@@ -53,6 +53,8 @@ fun MainScreen() {
     var timerRunning by remember { mutableStateOf(false) }
     var guessedWords by remember { mutableStateOf(listOf<Triple<String, Int, String>>()) }
     var lastTimeLeft by remember { mutableStateOf(60) }
+    var numPlayers by remember { mutableStateOf(1) }
+    var numRounds by remember { mutableStateOf(1) }
 
     val locale = Locale(language)
     val context = LocalContext.current
@@ -94,6 +96,9 @@ fun MainScreen() {
                 kotlinx.coroutines.delay(1000)
                 timeLeft -= 1
             } else if (timerRunning && timeLeft == 0 && screen == "game") {
+                if (currentWord.isNotEmpty()) {
+                    guessedWords = guessedWords + Triple(currentWord, lastTimeLeft - timeLeft, "not_guessed")
+                }
                 timerRunning = false
                 screen = "result"
             }
@@ -103,6 +108,8 @@ fun MainScreen() {
             "main" -> {
                 val title = if (language == "en") "CHARADES" else "CHARADAS"
                 val btnStart = stringResource(R.string.btn_start)
+                val numPlayersText = stringResource(R.string.num_players)
+                val numRoundsText = stringResource(R.string.num_rounds)
 
                 Surface(
                     modifier = Modifier.fillMaxSize(),
@@ -127,6 +134,43 @@ fun MainScreen() {
                                 color = Color.White
                             )
                             Spacer(modifier = Modifier.height(32.dp))
+
+                            // Number of players slider
+                            Text(text = "$numPlayersText: $numPlayers", color = Color.White, fontSize = 18.sp)
+                            Slider(
+                                value = numPlayers.toFloat(),
+                                onValueChange = { 
+                                    numPlayers = it.toInt()
+                                    if (numPlayers == 1) {
+                                        numRounds = 1
+                                    }
+                                 },
+                                valueRange = 1f..5f,
+                                steps = 3,
+                                colors = SliderDefaults.colors(
+                                    thumbColor = Color.White,
+                                    activeTrackColor = transparentButtonColor,
+                                    inactiveTrackColor = transparentButtonColor.copy(alpha = 0.3f)
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            // Number of rounds slider
+                            Text(text = "$numRoundsText: $numRounds", color = Color.White, fontSize = 18.sp)
+                            Slider(
+                                value = numRounds.toFloat(),
+                                onValueChange = { numRounds = it.toInt() },
+                                valueRange = 1f..5f,
+                                steps = 3,
+                                enabled = numPlayers > 1,
+                                colors = SliderDefaults.colors(
+                                    thumbColor = if (numPlayers > 1) Color.White else Color.Gray,
+                                    activeTrackColor = transparentButtonColor,
+                                    inactiveTrackColor = transparentButtonColor.copy(alpha = 0.3f)
+                                )
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+
                             Button(
                                 onClick = { screen = "category" },
                                 modifier = Modifier.fillMaxWidth().height(56.dp),

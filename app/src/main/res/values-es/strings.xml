@@ -15,4 +15,13 @@
     <string name="category_professions">Profesiones</string>
     <string name="status_guessed">Adivinada</string>
     <string name="status_passed">Pasada</string>
+    <string name="status_not_guessed">No adivinada</string>
+    <string name="num_players">Número de jugadores</string>
+    <string name="num_rounds">Número de rondas</string>
+    <string name="round_results">Resultados de la ronda %1$d</string>
+    <string name="final_results">Resultados Finales</string>
+    <string name="player_score">Jugador %1$d: %2$d puntos</string>
+    <string name="next_player">Siguiente jugador</string>
+    <string name="game_over">Fin del juego</string>
+    <string name="winner_announcement">¡El jugador %1$d gana!</string>
 </resources>
