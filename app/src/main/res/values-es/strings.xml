@@ -24,4 +24,7 @@
     <string name="next_player">Siguiente jugador</string>
     <string name="game_over">Fin del juego</string>
     <string name="winner_announcement">¡El jugador %1$d gana!</string>
+    <string name="btn_continue">Continuar</string>
+    <string name="btn_play_again">Jugar de nuevo</string>
+    <string name="final_score_title">Puntuación Final</string>
 </resources>

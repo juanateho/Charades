@@ -24,6 +24,7 @@ import com.example.charades.model.Words
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.charades.ui.screen.FinalScoreScreen
 import com.example.charades.ui.theme.CharadesTheme
 import com.example.charades.R
 import java.util.Locale
@@ -46,8 +47,9 @@ fun MainScreen() {
     var screen by remember { mutableStateOf("main") }
     var selectedCategory by remember { mutableStateOf("") }
     var score by remember { mutableStateOf(0) }
-    var round by remember { mutableStateOf(0) }
-    var wordList by remember { mutableStateOf(listOf<String>()) }
+    var wordIndexInRound by remember { mutableStateOf(0) }
+    var categoryWordList by remember { mutableStateOf(listOf<String>()) }
+    var roundWordList by remember { mutableStateOf(listOf<String>()) }
     var currentWord by remember { mutableStateOf("") }
     var timeLeft by remember { mutableStateOf(60) }
     var timerRunning by remember { mutableStateOf(false) }
@@ -55,6 +57,11 @@ fun MainScreen() {
     var lastTimeLeft by remember { mutableStateOf(60) }
     var numPlayers by remember { mutableStateOf(1) }
     var numRounds by remember { mutableStateOf(1) }
+    var currentPlayer by remember { mutableStateOf(1) }
+    var currentRound by remember { mutableStateOf(1) }
+    var playerScores by remember { mutableStateOf(mutableMapOf<Int, Int>()) }
+    var playerGuessedWords by remember { mutableStateOf(mutableMapOf<Int, Set<String>>()) }
+    var playerTotalTimes by remember { mutableStateOf(mutableMapOf<Int, Int>()) }
 
     val locale = Locale(language)
     val context = LocalContext.current
@@ -225,16 +232,26 @@ fun MainScreen() {
                                 "profesiones", "professions" -> "professions"
                                 else -> ""
                             }
-                            wordList = when (key) {
+                            categoryWordList = when (key) {
                                 "animals" -> Words.animals[language] ?: listOf()
                                 "movies" -> Words.movies[language] ?: listOf()
                                 "professions" -> Words.professions[language] ?: listOf()
                                 else -> listOf()
-                            }.shuffled()
-                            round = 0
+                            }
+                            playerScores = mutableMapOf()
+                            playerGuessedWords = mutableMapOf()
+                            playerTotalTimes = mutableMapOf()
+                            for (i in 1..numPlayers) {
+                                playerScores[i] = 0
+                                playerGuessedWords[i] = setOf()
+                                playerTotalTimes[i] = 0
+                            }
+                            wordIndexInRound = 0
                             score = 0
                             timeLeft = 60
-                            currentWord = if (wordList.isNotEmpty()) wordList[0] else ""
+                            val availableWords = categoryWordList.filter { it !in (playerGuessedWords[1] ?: setOf()) }.shuffled()
+                            roundWordList = availableWords
+                            currentWord = if (availableWords.isNotEmpty()) availableWords[0] else ""
                             guessedWords = listOf()
                             lastTimeLeft = 60
                             timerRunning = true
@@ -255,10 +272,10 @@ fun MainScreen() {
                     onCorrect = {
                         score += 1
                         guessedWords = guessedWords + Triple(currentWord, (lastTimeLeft - timeLeft), "guessed")
-                        round += 1
+                        wordIndexInRound += 1
                         lastTimeLeft = timeLeft
-                        if (round < wordList.size) {
-                            currentWord = wordList[round]
+                        if (wordIndexInRound < roundWordList.size) {
+                            currentWord = roundWordList[wordIndexInRound]
                         } else {
                             timerRunning = false
                             screen = "result"
@@ -266,10 +283,10 @@ fun MainScreen() {
                     },
                     onPass = {
                         guessedWords = guessedWords + Triple(currentWord, (lastTimeLeft - timeLeft), "passed")
-                        round += 1
+                        wordIndexInRound += 1
                         lastTimeLeft = timeLeft
-                        if (round < wordList.size) {
-                            currentWord = wordList[round]
+                        if (wordIndexInRound < roundWordList.size) {
+                            currentWord = roundWordList[wordIndexInRound]
                         } else {
                             timerRunning = false
                             screen = "result"
@@ -293,32 +310,82 @@ fun MainScreen() {
             "result" -> {
                 val resultTitle = stringResource(R.string.result_title)
                 val finalScore = stringResource(R.string.final_score)
-                val btnRestart = stringResource(R.string.btn_restart)
+                val btnContinue = stringResource(R.string.btn_continue)
                 val wordHeader = if (language == "en") "Word" else "Palabra"
                 val timeHeader = if (language == "en") "Time (s)" else "Tiempo (s)"
                 val statusHeader = if (language == "en") "Status" else "Estado"
 
                 ResultScreen(
                     score = score,
-                    onRestart = {
+                    onContinue = {
+                        val currentGuessedWords = guessedWords.filter { it.third == "guessed" }.map { it.first }
+                        val previouslyGuessed = playerGuessedWords[currentPlayer] ?: setOf()
+                        playerGuessedWords[currentPlayer] = previouslyGuessed + currentGuessedWords.toSet()
+                        playerScores[currentPlayer] = (playerScores[currentPlayer] ?: 0) + score
+                        playerTotalTimes[currentPlayer] = (playerTotalTimes[currentPlayer] ?: 0) + (60 - timeLeft)
+
+                        if (currentRound == numRounds && currentPlayer == numPlayers) {
+                            screen = "final_score"
+                        } else {
+                            if (currentPlayer < numPlayers) {
+                                currentPlayer++
+                            } else {
+                                currentPlayer = 1
+                                currentRound++
+                            }
+                            score = 0
+                            wordIndexInRound = 0
+                            val availableWords = categoryWordList.filter { it !in (playerGuessedWords[currentPlayer] ?: setOf()) }.shuffled()
+                            roundWordList = availableWords
+                            currentWord = if (availableWords.isNotEmpty()) availableWords[0] else ""
+                            timeLeft = 60
+                            lastTimeLeft = 60
+                            guessedWords = listOf()
+                            timerRunning = true
+                            screen = "game"
+                        }
+                    },
+                    resultTitle = resultTitle,
+                    finalScore = finalScore,
+                    btnContinue = btnContinue,
+                    guessedWords = guessedWords,
+                    wordHeader = wordHeader,
+                    timeHeader = timeHeader,
+                    statusHeader = statusHeader,
+                    gradientBrush = newBackgroundBrush,
+                    buttonColor = transparentButtonColor,
+                    geometricPatternColor = geometricPatternColor
+                )
+            }
+            "final_score" -> {
+                val finalTitle = stringResource(R.string.final_score_title)
+                val btnPlayAgain = stringResource(R.string.btn_play_again)
+
+                FinalScoreScreen(
+                    playerScores = playerScores,
+                    playerTotalTimes = playerTotalTimes,
+                    onPlayAgain = {
                         screen = "main"
                         score = 0
-                        round = 0
+                        wordIndexInRound = 0
                         selectedCategory = ""
-                        wordList = listOf()
+                        categoryWordList = listOf()
+                        roundWordList = listOf()
                         currentWord = ""
                         timeLeft = 60
                         timerRunning = false
                         guessedWords = listOf()
                         lastTimeLeft = 60
+                        numPlayers = 1
+                        numRounds = 1
+                        currentPlayer = 1
+                        currentRound = 1
+                        playerScores = mutableMapOf()
+                        playerGuessedWords = mutableMapOf()
+                        playerTotalTimes = mutableMapOf()
                     },
-                    resultTitle = resultTitle,
-                    finalScore = finalScore,
-                    btnRestart = btnRestart,
-                    guessedWords = guessedWords,
-                    wordHeader = wordHeader,
-                    timeHeader = timeHeader,
-                    statusHeader = statusHeader,
+                    finalTitle = finalTitle,
+                    btnPlayAgain = btnPlayAgain,
                     gradientBrush = newBackgroundBrush,
                     buttonColor = transparentButtonColor,
                     geometricPatternColor = geometricPatternColor

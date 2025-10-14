@@ -24,4 +24,7 @@
     <string name="next_player">Next Player</string>
     <string name="game_over">Game Over</string>
     <string name="winner_announcement">Player %1$d Wins</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_play_again">Play Again</string>
+    <string name="final_score_title">Final Score</string>
 </resources>

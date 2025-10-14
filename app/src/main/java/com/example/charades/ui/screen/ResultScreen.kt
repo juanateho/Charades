@@ -21,10 +21,10 @@ import com.example.charades.R
 @Composable
 fun ResultScreen(
     score: Int,
-    onRestart: () -> Unit,
+    onContinue: () -> Unit,
     resultTitle: String,
     finalScore: String,
-    btnRestart: String,
+    btnContinue: String,
     guessedWords: List<Triple<String, Int, String>>,
     wordHeader: String,
     timeHeader: String,
@@ -115,10 +115,10 @@ fun ResultScreen(
 
             Spacer(modifier = Modifier.height(32.dp))
             Button(
-                onClick = onRestart,
+                onClick = onContinue,
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
             ) {
-                Text(text = btnRestart, color = Color.White)
+                Text(text = btnContinue, color = Color.White)
             }
         }
     }
