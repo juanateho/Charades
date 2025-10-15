@@ -31,7 +31,8 @@ fun ResultScreen(
     statusHeader: String,
     gradientBrush: Brush,
     buttonColor: Color,
-    geometricPatternColor: Color // Added parameter
+    geometricPatternColor: Color,
+    totalTime: Int?
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -70,8 +71,13 @@ fun ResultScreen(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(24.dp))
+            val scoreText = if (totalTime != null) {
+                "$finalScore: $score (${totalTime}s)"
+            } else {
+                "$finalScore: $score"
+            }
             Text(
-                text = "$finalScore: $score",
+                text = scoreText,
                 fontSize = 24.sp,
                 color = Color.White
             )

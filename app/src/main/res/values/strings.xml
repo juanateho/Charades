@@ -27,4 +27,5 @@
     <string name="btn_continue">Continue</string>
     <string name="btn_play_again">Play Again</string>
     <string name="final_score_title">Final Score</string>
+    <string name="player_name">Player %1$d</string>
 </resources>
