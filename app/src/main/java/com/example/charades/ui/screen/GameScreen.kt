@@ -10,7 +10,6 @@ import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,6 +34,8 @@ fun GameScreen(
 ) {
     val passTextColor = Color(0xFFD50000) // Vibrant Red for Pass text
     val correctTextColor = Color(0xFF00C853) // Vibrant Green for Correct text
+    val passButtonContainerColor = passTextColor.copy(alpha = 0.1f)
+    val correctButtonContainerColor = correctTextColor.copy(alpha = 0.1f)
 
     Box(
         modifier = Modifier
@@ -60,95 +61,73 @@ fun GameScreen(
                 )
             }
     ) {
+        Text(
+            text = playerName,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            modifier = Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 32.dp)
+        )
+
         Column(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = playerName,
-                fontSize = 24.sp,
+                text = word,
+                fontSize = 36.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White,
-                modifier = Modifier.padding(top = 32.dp)
+                color = Color.White
             )
-            Row(
-                modifier = Modifier.fillMaxSize(),
-                verticalAlignment = Alignment.CenterVertically
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "$timerText: $timeLeft",
+                fontSize = 20.sp,
+                color = if (timeLeft <= 5) Color.Red else Color.White
+            )
+            Spacer(modifier = Modifier.height(24.dp))
+            Text(
+                text = "$scoreText: $score",
+                fontSize = 20.sp,
+                color = Color.White
+            )
+        }
+
+        Row(
+            modifier = Modifier.fillMaxSize(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Button(
+                onClick = onPass,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(0.25f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = passButtonContainerColor,
+                    contentColor = passTextColor
+                ),
+                shape = MaterialTheme.shapes.extraSmall
             ) {
-                Button(
-                    onClick = onPass,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .drawBehind {
-                            val strokeWidth = 1.dp.toPx()
-                            drawLine(
-                                color = passTextColor,
-                                start = Offset(size.width - strokeWidth / 2, 0f),
-                                end = Offset(size.width - strokeWidth / 2, size.height),
-                                strokeWidth = strokeWidth,
-                                cap = StrokeCap.Square
-                            )
-                        },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = passTextColor
-                    ),
-                    shape = MaterialTheme.shapes.extraSmall
-                ) {
-                    Text(text = btnPass, fontSize = 24.sp)
-                }
-
-                Column(
-                    modifier = Modifier
-                        .weight(2f)
-                        .padding(16.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = word,
-                        fontSize = 36.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = "$timerText: $timeLeft",
-                        fontSize = 20.sp,
-                        color = if (timeLeft <= 5) Color.Red else Color.White
-                    )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    Text(
-                        text = "$scoreText: $score",
-                        fontSize = 20.sp,
-                        color = Color.White
-                    )
-                }
-
-                Button(
-                    onClick = onCorrect,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                        .drawBehind {
-                            val strokeWidth = 1.dp.toPx()
-                            drawLine(
-                                color = correctTextColor,
-                                start = Offset(strokeWidth / 2, 0f),
-                                end = Offset(strokeWidth / 2, size.height),
-                                strokeWidth = strokeWidth,
-                                cap = StrokeCap.Square
-                            )
-                        },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Transparent,
-                        contentColor = correctTextColor
-                    ),
-                    shape = MaterialTheme.shapes.extraSmall
-                ) {
-                    Text(text = btnCorrect, fontSize = 24.sp)
-                }
+                Text(text = btnPass, fontSize = 24.sp)
+            }
+            Spacer(modifier = Modifier.weight(0.5f))
+            Button(
+                onClick = onCorrect,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(0.25f),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = correctButtonContainerColor,
+                    contentColor = correctTextColor
+                ),
+                shape = MaterialTheme.shapes.extraSmall
+            ) {
+                Text(text = btnCorrect, fontSize = 24.sp)
             }
         }
     }
