@@ -155,6 +155,7 @@ fun MainScreen() {
                                  },
                                 valueRange = 1f..5f,
                                 steps = 3,
+                                modifier = Modifier.fillMaxWidth(0.6f),
                                 colors = SliderDefaults.colors(
                                     thumbColor = Color.White,
                                     activeTrackColor = transparentButtonColor,
@@ -171,6 +172,7 @@ fun MainScreen() {
                                 valueRange = 1f..5f,
                                 steps = 3,
                                 enabled = numPlayers > 1,
+                                modifier = Modifier.fillMaxWidth(0.6f),
                                 colors = SliderDefaults.colors(
                                     thumbColor = if (numPlayers > 1) Color.White else Color.Gray,
                                     activeTrackColor = transparentButtonColor,
@@ -181,7 +183,7 @@ fun MainScreen() {
 
                             Button(
                                 onClick = { screen = "category" },
-                                modifier = Modifier.fillMaxWidth().height(56.dp),
+                                modifier = Modifier.fillMaxWidth(0.6f).height(56.dp),
                                 colors = ButtonDefaults.buttonColors(containerColor = transparentButtonColor)
                             ) {
                                 Text(text = btnStart, color = Color.White, fontSize = 18.sp)

@@ -67,7 +67,7 @@ fun FinalScoreScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         LazyColumn(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(0.6f),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             itemsIndexed(sortedScores) { index, (player, score) ->
@@ -86,6 +86,7 @@ fun FinalScoreScreen(
         Spacer(modifier = Modifier.height(32.dp))
         Button(
             onClick = onPlayAgain,
+            modifier = Modifier.fillMaxWidth(0.6f).height(56.dp),
             colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
         ) {
             Text(text = btnPlayAgain, color = Color.White)

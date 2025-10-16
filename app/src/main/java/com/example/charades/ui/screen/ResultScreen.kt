@@ -85,7 +85,7 @@ fun ResultScreen(
 
             if (guessedWords.isNotEmpty()) {
                 Row(
-                    modifier = Modifier.fillMaxWidth().horizontalScroll(rememberScrollState()),
+                    modifier = Modifier.fillMaxWidth(0.6f).horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     // Header column
@@ -122,6 +122,7 @@ fun ResultScreen(
             Spacer(modifier = Modifier.height(32.dp))
             Button(
                 onClick = onContinue,
+                modifier = Modifier.fillMaxWidth(0.6f).height(56.dp),
                 colors = ButtonDefaults.buttonColors(containerColor = buttonColor)
             ) {
                 Text(text = btnContinue, color = Color.White)
