@@ -33,7 +33,6 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun CharadesTheme(
     darkTheme: Boolean = true, // Force dark theme
-    // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false, // Disable dynamic color
     content: @Composable () -> Unit
 ) {

@@ -44,7 +44,7 @@ fun CategoryMenuScreen(
             items(categories) { category ->
                 Button(
                     onClick = { onCategorySelected(category) },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth(0.6f).height(45.dp),
                     colors = ButtonDefaults.buttonColors(containerColor = buttonColor) // Use passed buttonColor
                 ) {
                     Text(text = category, color = Color.White, fontSize = 20.sp)
