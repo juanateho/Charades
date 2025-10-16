@@ -12,11 +12,9 @@ class GameLogicTest {
         val language = "en"
         val categoryWords = Words.animals[language] ?: emptyList()
 
-        // When the words are shuffled twice
         val shuffledWords1 = categoryWords.shuffled()
         val shuffledWords2 = categoryWords.shuffled()
 
-        // Then the two lists should not be identical
         assertNotEquals(shuffledWords1, shuffledWords2)
     }
 }

@@ -77,7 +77,7 @@ fun MainScreen() {
 
         val drawGeometricPattern: Modifier.(Boolean) -> Modifier = { apply ->
             if (apply) {
-                this.drawBehind { // 'this' refers to DrawScope
+                this.drawBehind {
                     val canvasWidth = size.width
                     val canvasHeight = size.height
                     drawCircle(
@@ -143,7 +143,6 @@ fun MainScreen() {
                             )
                             Spacer(modifier = Modifier.height(32.dp))
 
-                            // Number of players slider
                             Text(text = "$numPlayersText: $numPlayers", color = Color.White, fontSize = 18.sp)
                             Slider(
                                 value = numPlayers.toFloat(),
@@ -164,7 +163,6 @@ fun MainScreen() {
                             )
                             Spacer(modifier = Modifier.height(16.dp))
 
-                            // Number of rounds slider
                             Text(text = "$numRoundsText: $numRounds", color = Color.White, fontSize = 18.sp)
                             Slider(
                                 value = numRounds.toFloat(),
@@ -272,8 +270,6 @@ fun MainScreen() {
                 val playerName = stringResource(R.string.player_name, currentPlayer)
 
                 GameScreen(
-                    category = selectedCategory,
-                    language = language,
                     playerName = playerName,
                     onCorrect = {
                         score += 1
@@ -297,10 +293,6 @@ fun MainScreen() {
                             timerRunning = false
                             screen = "result"
                         }
-                    },
-                    onTimeUp = {
-                        timerRunning = false
-                        screen = "result"
                     },
                     word = currentWord,
                     score = score,
@@ -408,7 +400,6 @@ fun MainScreen() {
                     gradientBrush = newBackgroundBrush,
                     buttonColor = transparentButtonColor,
                     geometricPatternColor = geometricPatternColor,
-                    totalTime = if (numPlayers == 1) 60 - timeLeft else null
                 )
             }
             "final_score" -> {

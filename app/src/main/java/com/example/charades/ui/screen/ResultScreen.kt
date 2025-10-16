@@ -32,7 +32,6 @@ fun ResultScreen(
     gradientBrush: Brush,
     buttonColor: Color,
     geometricPatternColor: Color,
-    totalTime: Int?
 ) {
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -41,7 +40,7 @@ fun ResultScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(gradientBrush)
-                .drawBehind { // Added geometric pattern
+                .drawBehind {
                     val canvasWidth = size.width
                     val canvasHeight = size.height
                     drawCircle(
@@ -71,13 +70,8 @@ fun ResultScreen(
                 fontWeight = FontWeight.Bold
             )
             Spacer(modifier = Modifier.height(24.dp))
-            val scoreText = if (totalTime != null) {
-                "$finalScore: $score (${totalTime}s)"
-            } else {
-                "$finalScore: $score"
-            }
             Text(
-                text = scoreText,
+                text = "$finalScore: $score",
                 fontSize = 24.sp,
                 color = Color.White
             )
@@ -88,24 +82,17 @@ fun ResultScreen(
                     modifier = Modifier.fillMaxWidth(0.6f).horizontalScroll(rememberScrollState()),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    // Header column
                     Column {
                         Text(wordHeader, fontWeight = FontWeight.Bold, color = Color.White)
                         Text(timeHeader, fontWeight = FontWeight.Bold, color = Color.White)
                         Text(statusHeader, fontWeight = FontWeight.Bold, color = Color.White)
                     }
 
-                    // Data columns
                     guessedWords.forEach { (word, time, status) ->
-                        val statusText = when (status) {
-                            "guessed" -> stringResource(R.string.status_guessed)
-                            "passed" -> stringResource(R.string.status_passed)
-                            else -> stringResource(R.string.status_not_guessed)
-                        }
-                        val statusColor = when (status) {
-                            "guessed" -> Color.Green
-                            "passed" -> Color.Red
-                            else -> Color.Yellow
+                        val (statusText, statusColor) = when (status) {
+                            "guessed" -> stringResource(R.string.status_guessed) to Color.Green
+                            "passed" -> stringResource(R.string.status_passed) to Color.Red
+                            else -> stringResource(R.string.status_not_guessed) to Color.Yellow
                         }
                         Column {
                             Text(word, color = Color.White)

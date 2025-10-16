@@ -14,14 +14,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+private val passTextColor = Color(0xFFD50000)
+private val correctTextColor = Color(0xFF00C853)
+private val passButtonContainerColor = passTextColor.copy(alpha = 0.1f)
+private val correctButtonContainerColor = correctTextColor.copy(alpha = 0.1f)
+
 @Composable
 fun GameScreen(
-    category: String,
-    language: String,
     playerName: String,
     onCorrect: () -> Unit,
     onPass: () -> Unit,
-    onTimeUp: () -> Unit,
     word: String,
     score: Int,
     timeLeft: Int,
@@ -30,18 +32,13 @@ fun GameScreen(
     btnCorrect: String,
     btnPass: String,
     gradientBrush: Brush,
-    geometricPatternColor: Color // Added parameter
+    geometricPatternColor: Color
 ) {
-    val passTextColor = Color(0xFFD50000) // Vibrant Red for Pass text
-    val correctTextColor = Color(0xFF00C853) // Vibrant Green for Correct text
-    val passButtonContainerColor = passTextColor.copy(alpha = 0.1f)
-    val correctButtonContainerColor = correctTextColor.copy(alpha = 0.1f)
-
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(gradientBrush)
-            .drawBehind { // Added geometric pattern
+            .drawBehind {
                 val canvasWidth = size.width
                 val canvasHeight = size.height
                 drawCircle(

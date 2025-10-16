@@ -1,13 +1,10 @@
 <resources>
     <string name="app_name">Charadas</string>
-    <string name="title_main">CHARADAS</string>
-    <string name="btn_language">Cambiar idioma</string>
     <string name="btn_start">Iniciar juego</string>
     <string name="select_category">Selecciona una categoría</string>
     <string name="score">Puntaje</string>
     <string name="timer">Tiempo restante</string>
     <string name="btn_correct">¡Acierto!</string>
-    <string name="btn_restart">Reiniciar juego</string>
     <string name="result_title">Resultados</string>
     <string name="final_score">Puntaje final</string>
     <string name="category_animals">Animales</string>
@@ -18,12 +15,6 @@
     <string name="status_not_guessed">No adivinada</string>
     <string name="num_players">Número de jugadores</string>
     <string name="num_rounds">Número de rondas</string>
-    <string name="round_results">Resultados de la ronda %1$d</string>
-    <string name="final_results">Resultados Finales</string>
-    <string name="player_score">Jugador %1$d: %2$d puntos</string>
-    <string name="next_player">Siguiente jugador</string>
-    <string name="game_over">Fin del juego</string>
-    <string name="winner_announcement">¡El jugador %1$d gana!</string>
     <string name="btn_continue">Continuar</string>
     <string name="btn_play_again">Jugar de nuevo</string>
     <string name="final_score_title">Puntuación Final</string>
