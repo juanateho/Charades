@@ -1,3 +1,31 @@
 <resources>
     <string name="app_name">Charades</string>
+    <string name="title_main">CHARADES</string>
+    <string name="btn_language">Change language</string>
+    <string name="btn_start">Start game</string>
+    <string name="select_category">Select a category</string>
+    <string name="score">Score</string>
+    <string name="timer">Time left</string>
+    <string name="btn_correct">Correct</string>
+    <string name="btn_restart">Restart game</string>
+    <string name="result_title">Results</string>
+    <string name="final_score">Final score</string>
+    <string name="category_animals">Animals</string>
+    <string name="category_movies">Movies</string>
+    <string name="category_professions">Professions</string>
+    <string name="status_guessed">Guessed</string>
+    <string name="status_passed">Passed</string>
+    <string name="status_not_guessed">Not guessed</string>
+    <string name="num_players">Number of players</string>
+    <string name="num_rounds">Number of rounds</string>
+    <string name="round_results">Round %1$d Results</string>
+    <string name="final_results">Final Results</string>
+    <string name="player_score">Player %1$d: %2$d points</string>
+    <string name="next_player">Next Player</string>
+    <string name="game_over">Game Over</string>
+    <string name="winner_announcement">Player %1$d Wins</string>
+    <string name="btn_continue">Continue</string>
+    <string name="btn_play_again">Play Again</string>
+    <string name="final_score_title">Final Score</string>
+    <string name="player_name">Player %1$d</string>
 </resources>
